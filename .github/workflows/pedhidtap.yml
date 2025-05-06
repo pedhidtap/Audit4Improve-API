@@ -1,0 +1,30 @@
+name: Flujo personalizado
+on:
+  issues:
+    types: [opened]
+  project_card:
+    types: [moved]
+  workflow_dispatch:
+
+jobs:
+  mostrar-datos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mostrar datos clave del evento
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log("📌 Evento recibido:", context.eventName);
+            console.log("🕒 Fecha y hora:", new Date().toISOString());
+            console.log("👤 Actor:", context.actor);
+            console.log("📂 Repositorio:", `${context.repo.owner}/${context.repo.repo}`);
+            console.log("🔢 Run ID:", context.runId);
+            console.log("📎 ID del Issue:", context.payload.issue?.id || "No es un issue");
+            console.log("🗂️ ID del Project Card:", context.payload.project_card?.id || "No es una tarjeta");
+
+      - name: Mostrar el payload completo del evento
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log("📦 Payload completo:");
+            console.log(JSON.stringify(context.payload, null, 2));
